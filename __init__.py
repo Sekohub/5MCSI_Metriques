@@ -44,30 +44,41 @@ from flask import jsonify
 import requests
 from datetime import datetime
 
+
 @app.route('/api/commits')
 def api_commits():
+    import requests
+    from datetime import datetime
+    from flask import jsonify
+
     url = "https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits"
 
     headers = {
-        "User-Agent": "alwaysdata-app"
+        "User-Agent": "alwaysdata",
+        "Accept": "application/vnd.github.v3+json"
     }
 
-    response = requests.get(url, headers=headers)
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        r.raise_for_status()   # déclenche exception si 4xx / 5xx
+        commits = r.json()
 
-    if response.status_code != 200:
-        return jsonify({"error": "GitHub API error"}), 500
+        minutes = []
+        for c in commits:
+            date = c["commit"]["author"]["date"]
+            minutes.append(
+                datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ').minute
+            )
 
-    commits = response.json()
+        return jsonify(minutes)
 
-    minutes = []
-    for c in commits:
-        date = c["commit"]["author"]["date"]
-        minute = datetime.strptime(
-            date, '%Y-%m-%dT%H:%M:%SZ'
-        ).minute
-        minutes.append(minute)
+    except Exception as e:
+        # alwaysdata NE DOIT JAMAIS voir une exception
+        return jsonify({
+            "error": "API failure",
+            "message": str(e)
+        }), 200
 
-    return jsonify(minutes)
 
 
 
