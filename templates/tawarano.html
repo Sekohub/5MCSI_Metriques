@@ -19,11 +19,7 @@
           [1704758400, 14]
         ];
 
-        var dataArray = [['Date', 'Température (°C)']];
-
-        rawData.forEach(function(row) {
-          dataArray.push([ new Date(row[0] * 1000), row[1] ]);
-        });
+        var dataArray = [['Timestamp', 'Température (°C)']];
 
         var data = google.visualization.arrayToDataTable(dataArray);
 
