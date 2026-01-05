@@ -7,10 +7,7 @@ form {
   padding: 1em;
   border: 1px solid #ccc;
   border-radius: 1em;
-}
-
-.form-group {
-  margin-bottom: 15px;
+  
 }
 
 ul {
@@ -74,17 +71,22 @@ button {
      le même espace qu'entre les libellés et les champs. */
   margin-left: 0.5em;
 }
+
+.form-group {
+  /* Espacement entre chaque label. */
+  margin-bottom: 15px;
+}
 </style>
 <form action="/formulaire-de-contact" method="post">
-  <div>
+  <div class="form-group">
     <label for="name">Nom&nbsp;:</label>
     <input type="text" id="name" name="user_name" />
-  <div>
-  <div>
+  </div>
+  <div class="form-group">
     <label for="mail">Prénom&nbsp;:</label>
     <input type="text" id="surname" name="user_pseudo" />
   </div>
-  <div>
+  <div class="form-group">
     <label for="msg">Message&nbsp;:</label>
     <textarea id="msg" name="user_message"></textarea>
   </div>
