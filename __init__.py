@@ -35,13 +35,30 @@ def mongraphique():
 def tawaranoTemp():
     return render_template("tawarano.html")
 
-
-@app.route('/comm/')
+@app.route('/extract-minutes/<date_string>')
 def extract_minutes(date_string):
-  response = urlopen('https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits')
-        date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
-        minutes = date_object.minute
-        return jsonify({'minutes': minutes})
-  
+    date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    return jsonify({"minutes": date_object.minute})
+
+@app.route('/api/commits')
+def api_commits():
+    url = "https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits"
+    response = requests.get(url)
+    commits = response.json()
+
+    minutes = []
+    for commit in commits:
+        date = commit["commit"]["author"]["date"]
+        dt = datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
+        minutes.append(dt.minute)
+
+    commits_by_minute = dict(Counter(minutes))
+    return jsonify(commits_by_minute)
+
+@app.route('/commits/')
+def commits_page():
+    return render_template("commits.html")
+
+
 if __name__ == "__main__":
   app.run(debug=True)
