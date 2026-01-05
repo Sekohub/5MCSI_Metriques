@@ -52,8 +52,8 @@ def api_commits():
         dt = datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
         minutes.append(dt.minute)
 
-    commits_by_minute = dict(Counter(minutes))
-    return jsonify(commits_by_minute)
+    return jsonify(minutes)
+
 
 @app.route('/commits/')
 def commits_page():
