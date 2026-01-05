@@ -36,8 +36,9 @@ def tawaranoTemp():
     return render_template("tawarano.html")
 
 
-@app.route('/extract-minutes/<date_string>')
+@app.route('/comm/')
 def extract_minutes(date_string):
+  response = urlopen('https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits')
         date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
         minutes = date_object.minute
         return jsonify({'minutes': minutes})
