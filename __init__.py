@@ -23,7 +23,7 @@ def meteo():
     results = []
     for list_element in json_content.get('list', []):
         dt_value = list_element.get('dt')
-        temp_day_value = list_element.get('main', {}).get('temp') - 273.15 # Conversion de Kelvin en °c 
+        temp_day_value = list_element.get('main', {}).get('temp') - 273.15 
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
 
@@ -60,7 +60,7 @@ def api_commits():
 
     try:
         r = requests.get(url, headers=headers, timeout=10)
-        r.raise_for_status()   # déclenche exception si 4xx / 5xx
+        r.raise_for_status()   
         commits = r.json()
 
         minutes = []
@@ -73,7 +73,6 @@ def api_commits():
         return jsonify(minutes)
 
     except Exception as e:
-        # alwaysdata NE DOIT JAMAIS voir une exception
         return jsonify({
             "error": "API failure",
             "message": str(e)
